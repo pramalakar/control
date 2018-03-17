@@ -25,7 +25,7 @@
       "scripts": [
         "../node_modules/jquery/dist/jquery.min.js",
         "../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-        "../beagle/node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js",
+        "../beagle/dist/html/assets/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.js",
         "../node_modules/datatables.net/js/jquery.dataTables.js",
         "../node_modules/datatables.net-buttons/js/dataTables.buttons.js",
         "../node_modules/datatables.net-buttons/js/buttons.html5.js",
