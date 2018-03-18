@@ -1,51 +1,26 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
+import {DataService} from '../../../providers/data-service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
-
-class Person {
-  id: number;
-  firstName: string;
-  lastName: string;
-}
 
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss']
 })
-export class UserListComponent implements OnInit, AfterViewInit  {
+export class UserListComponent  {
 
-  dtOptions: any;
-  persons: any;
-  // We use this trigger because fetching the list of persons can be quite long,
-  // thus we ensure the data is fetched before rendering
-  dtTrigger: Subject<any> = new Subject();
-
-  constructor() {
+  readonly ROOT_URL = 'http://localhost:60882';
+  users: any;
+  constructor(private dataService: DataService, private http: HttpClient) {
+    this.getUsers();
   }
 
-  ngOnInit() {
-    this.dtOptions = {
-      buttons: [
-        'copy', 'excel', 'pdf', 'print'
-      ],
-      dom:
-      '<\'row be-datatable-header\'<\'col-sm-6 text-left\'f><\'col-sm-6\'B>>' +
-      '<\'row be-datatable-body\'<\'col-sm-12\'tr>>' +
-      '<\'row be-datatable-footer\'<\'col-sm-5\'i><\'col-sm-7\'p>>'
-    };
-    this.persons = [
-      {
-        'first': 'Prakash',
-        'last': 'Malakar',
-        'email': 'pramalakar.2010@gmail.com'
-      }
-    ];
+  getUsers() {
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+
+    this.http.post('http://localhost:60882/api/users/GetAllUsers', {headers: headers}).subscribe(res => this.users = res);
   }
-
-  ngAfterViewInit(): void {
-    this.dtTrigger.next();
-  }
-
-
 }

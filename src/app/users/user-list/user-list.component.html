@@ -7,19 +7,17 @@
     </div>
   </div>
   <div class="card-body">
-
-
     <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped table-hover table-fw-widget">
       <thead>
       <tr>
-        <th>Name</th>
+        <th>Id</th>
         <th>Email</th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let person of persons">
-        <td>{{ person.first }} {{ person.last }}</td>
-        <td>{{ person.email }}</td>
+      <tr *ngFor="let user of users">
+        <td>{{ user.id }}</td>
+        <td>{{ user.email }}</td>
       </tr>
       </tbody>
     </table>
