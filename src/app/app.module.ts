@@ -8,6 +8,8 @@ import { DataTablesModule } from 'angular-datatables';
 
 import { HttpClientModule } from '@angular/common/http';
 import {DataService} from '../providers/data-service';
+import { AsyncLocalStorageModule } from 'angular-async-local-storage';
+
 
 @NgModule({
   declarations: [
@@ -17,7 +19,8 @@ import {DataService} from '../providers/data-service';
     BrowserModule,
     AppRoutingModule,
     DataTablesModule,
-    HttpClientModule
+    HttpClientModule,
+    AsyncLocalStorageModule
   ],
   providers: [DataService],
   bootstrap: [AppComponent]

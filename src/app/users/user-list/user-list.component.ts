@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
+// import {Subject} from 'rxjs/Subject';
 import {DataService} from '../../../providers/data-service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 

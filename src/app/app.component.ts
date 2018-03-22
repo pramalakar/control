@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 
 
 declare var BeagleApp: any;
@@ -13,7 +12,7 @@ export class AppComponent implements OnInit {
 
   title = 'Admin Control App';
 
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
   ngOnInit(): void {
     BeagleApp.init();
