@@ -18,9 +18,8 @@ export class UserListComponent  {
   }
 
   getUsers() {
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-
-    this.http.post('http://localhost:60882/api/users/GetAllUsers', {headers: headers}).subscribe(res => this.users = res);
+    this.dataService.execute('/api/users/GetAllUsers', {}).subscribe((data) => {
+      this.users = data;
+    });
   }
 }

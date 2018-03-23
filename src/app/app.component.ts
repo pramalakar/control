@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-
+import {DataService} from '../providers/data-service';
 
 declare var BeagleApp: any;
 
@@ -12,9 +12,12 @@ export class AppComponent implements OnInit {
 
   title = 'Admin Control App';
 
-  constructor() {}
+  constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
     BeagleApp.init();
+
+    this.dataService.init();
   }
+
 }

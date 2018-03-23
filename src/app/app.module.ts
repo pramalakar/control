@@ -9,20 +9,23 @@ import { DataTablesModule } from 'angular-datatables';
 import { HttpClientModule } from '@angular/common/http';
 import {DataService} from '../providers/data-service';
 import { AsyncLocalStorageModule } from 'angular-async-local-storage';
+import { Ng2Webstorage } from 'ngx-webstorage';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     DataTablesModule,
     HttpClientModule,
-    AsyncLocalStorageModule
+    AsyncLocalStorageModule,
+    Ng2Webstorage
   ],
   providers: [DataService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: []
 })
 export class AppModule { }

@@ -6,6 +6,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {isNullOrUndefined} from 'util';
 import { AsyncLocalStorage } from 'angular-async-local-storage';
+import { Ng2Webstorage } from 'ngx-webstorage';
 
 
 
@@ -27,7 +28,7 @@ export class DataService {
   // ];
 
   // public weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  constructor(private http: HttpClient, protected localStorage: AsyncLocalStorage) {
+  constructor(private http: HttpClient, private localStorage: AsyncLocalStorage) {
     // console.log('init dataservice');
     this.server = '';
     // this.user = {};
@@ -39,6 +40,11 @@ export class DataService {
       this.server = 'localhost:60882';
       // this.get('server').then(server => this.server = server),
       // this.get('token').then(token => this.token = token)
+    this.localStorage.getItem('token').subscribe((token) => {
+      this.token = token;
+    }, () => {
+      console.log('error');
+    });
     // ]);
   }
   // public getUsers() {
@@ -46,7 +52,7 @@ export class DataService {
   // }
   //
   //
-  public set(key, value): any{
+  public set(key, value): any {
     console.log('[DataService:set]Setting: ' + key + ' = ' + value);
     return this.localStorage.setItem(key, value);
   }
@@ -100,22 +106,23 @@ export class DataService {
     return this.http.post(path, request, options);
   }
 
-  public login(email: String, password: String) {
+  public login(loginForm) {
     // let req = 'username=' + email + '&password=' + password + '&grant_type=password';
     // return this.execute('/token', req);
     // this.uuid = uuid;
-    let req = 'username=' + email + '&password=' + password + '&grant_type=password';
+    let req = 'username=' + loginForm.username + '&password=' + loginForm.password + '&grant_type=password';
     // return new Promise(function (resolve, reject) {
       console.log('login');
       this.execute('/token', req).subscribe((data) => {
         this.token = data['access_token'];
         if (this.token) {
           this.localStorage.setItem('token', this.token).subscribe(() => {
-
               this.checkLoggedIn().then(() => {
                 console.log('checkLoggedIn returned true');
                 return (this.user);
               });
+          }, () => {
+            console.log('error');
           });
         } else {
           console.log ('Login failed');
@@ -123,7 +130,6 @@ export class DataService {
       });
     // });
   }
-
   private checkLoggedIn(): Promise<any> {
     console.log('[DataService:checkLoggedIn]Checking for logged in user');
 
@@ -134,10 +140,16 @@ export class DataService {
         if (!isNullOrUndefined(token)) {
           console.log('[DataService:checkLoggedIn]logged in: ' + this.token);
           // this.events.publish('user:loggedIn', true);
-          this.loadUserDetails();
-          // this.loadUserDetails().then((details) => {
+          // console.log('User Details: ' + this.loadUserDetails());
+          this.loadUserDetails().subscribe((user) => {
+            console.log('user: ' + JSON.stringify(user));
+            this.localStorage.setItem('user', JSON.stringify(user)).subscribe(() => {
+              // console.log('done');
+            }, () => {
+              // console.log('error');
+            });
             resolve(true);
-          // });
+          });
         } else {
           console.log('[DataService:checkLoggedIn]not logged in');
           resolve(false);
@@ -186,11 +198,8 @@ export class DataService {
   public logout() {
   }
 
-  public loadUserDetails() {
-    this.execute('/api/Users/GetLoggedInUser', {}).subscribe((data) => {
-      console.log('user info');
-      console.log(JSON.stringify(data));
-    });
+  public loadUserDetails(): Observable<any> {
+    return this.execute('/api/Users/GetLoggedInUser', {});
   }
 
   public loadAppDetails() {
