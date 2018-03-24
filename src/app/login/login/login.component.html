@@ -2,12 +2,12 @@
   <div class="card card-border-color card-border-color-primary">
     <div class="card-header"><img src="assets/img/logo.png" alt="logo" width="102" height="27" class="logo-img"><span class="splash-description">Please enter your user information.</span></div>
     <div class="card-body">
-      <form action="index.html" method="get">
+      <form [formGroup]="loginForm" (ngSubmit)="login(loginForm)">
         <div class="form-group">
-          <input id="username" type="text" placeholder="Username" autocomplete="off" class="form-control">
+          <input id="username" formControlName="username" type="text" placeholder="Username" autocomplete="off" class="form-control">
         </div>
         <div class="form-group">
-          <input id="password" type="password" placeholder="Password" class="form-control">
+          <input id="password" formControlName="password" type="password" placeholder="Password" class="form-control">
         </div>
         <div class="form-group row login-tools">
           <div class="col-6 login-remember">

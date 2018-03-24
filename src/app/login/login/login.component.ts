@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
+import {DataService} from '../../../providers/data-service';
+
 
 @Component({
   selector: 'app-login',
@@ -6,10 +9,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
-  constructor() { }
+  loginForm: FormGroup;
+  constructor(private dataService: DataService) { }
 
   ngOnInit() {
+    this.loginForm = new FormGroup({
+      username: new FormControl(),
+      password: new FormControl()
+    });
+  }
+
+  login(loginForm) {
+    console.log(loginForm.value);
+    this.dataService.login(loginForm.value);
   }
 
 }

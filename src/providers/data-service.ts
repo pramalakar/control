@@ -102,6 +102,7 @@ export class DataService {
         })
         };
     let path = 'http://' + 'localhost:60882' + action;
+    console.log(options);
     console.log(path);
     return this.http.post(path, request, options);
   }
@@ -226,6 +227,4 @@ export class DataService {
   public _isNullOrUndefined(pram) {
     return isNullOrUndefined(pram);
   }
-
-
 }
