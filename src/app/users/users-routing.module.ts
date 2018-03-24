@@ -15,6 +15,11 @@ const routes: Routes = [
   {
     path: 'user-create',
     component: UserCreateComponent
+  },
+  {
+    path: '**',
+    redirectTo: '',
+    pathMatch: 'full'
   }
 ];
 

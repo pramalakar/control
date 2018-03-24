@@ -13,7 +13,7 @@ import { Ng2Webstorage } from 'ngx-webstorage';
 
 @Injectable()
 export class DataService {
-  private server;
+  private server = 'localhost:60882';
   private user;
   private token;
   // private user;
@@ -36,16 +36,23 @@ export class DataService {
   }
 
   public init() {
-    // return Promise.all([
-      this.server = 'localhost:60882';
-      // this.get('server').then(server => this.server = server),
-      // this.get('token').then(token => this.token = token)
-    this.localStorage.getItem('token').subscribe((token) => {
-      this.token = token;
-    }, () => {
-      console.log('error');
-    });
-    // ]);
+    return Promise.all([
+      // this.get('server').subscribe((server) => this.server = server),
+      this.get('token').subscribe((token) => {
+        this.token = token;
+      })
+    ]);
+
+    // // return Promise.all([
+    //   this.server = 'localhost:60882';
+    //   // this.get('server').then(server => this.server = server),
+    //   // this.get('token').then(token => this.token = token)
+    // this.localStorage.getItem('token').subscribe((token) => {
+    //   this.token = token;
+    // }, () => {
+    //   console.log('error');
+    // });
+    // // ]);
   }
   // public getUsers() {
   //   return this.users;
@@ -59,7 +66,29 @@ export class DataService {
 
   public get(key) {
     console.log('[DataService:get]Getting: ' + key);
+    console.log('[DataService:get]Getting: ' + this.localStorage.getItem(key));
     return this.localStorage.getItem(key);
+  }
+
+  public getAll(keys) {
+    console.log('[DataService:getAll]Getting: ' + keys);
+    let store = {};
+    let promises = [];
+    for (let key of keys) {
+      let prom = this.localStorage.getItem(key).subscribe((value) => {
+        console.log(value);
+        store[key] = value;
+      });
+      promises.push(prom);
+    }
+    return new Promise(function (resolve, reject) {
+      Promise.all(promises).then(() => {
+        resolve(store);
+      }).catch(error => {
+        reject(error);
+      });
+
+    });
   }
 
   public getServerAddress() {

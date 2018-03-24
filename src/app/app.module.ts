@@ -15,7 +15,7 @@ import { Ng2Webstorage } from 'ngx-webstorage';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,

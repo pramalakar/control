@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import {DataService} from '../../../providers/data-service';
+import {DataService} from '../../providers/data-service';
 
 
 @Component({
