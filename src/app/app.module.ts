@@ -8,9 +8,10 @@ import { DataTablesModule } from 'angular-datatables';
 
 import { HttpClientModule } from '@angular/common/http';
 import {DataService} from '../providers/data-service';
+import { AuthGuardService } from '../providers/auth-guard.service';
+
 import { AsyncLocalStorageModule } from 'angular-async-local-storage';
 import { Ng2Webstorage } from 'ngx-webstorage';
-
 
 @NgModule({
   declarations: [
@@ -24,7 +25,7 @@ import { Ng2Webstorage } from 'ngx-webstorage';
     AsyncLocalStorageModule,
     Ng2Webstorage
   ],
-  providers: [DataService],
+  providers: [DataService, AuthGuardService],
   bootstrap: [AppComponent],
   exports: []
 })

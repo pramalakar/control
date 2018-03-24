@@ -131,7 +131,7 @@ export class DataService {
       });
     // });
   }
-  private checkLoggedIn(): Promise<any> {
+  public checkLoggedIn(): Promise<any> {
     console.log('[DataService:checkLoggedIn]Checking for logged in user');
 
     let promise = new Promise((resolve, reject) => {
