@@ -1,12 +1,14 @@
 /**
  * Created by Prakash Malakar on 18/03/2018.
  */
-import {Injectable} from '@angular/core';
+import {Injectable, EventEmitter} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import 'rxjs/add/operator/map';
 import {isNullOrUndefined} from 'util';
 import { AsyncLocalStorage } from 'angular-async-local-storage';
 import { Ng2Webstorage } from 'ngx-webstorage';
+import { Router, CanActivate, CanActivateChild, ActivatedRouteSnapshot, RouterStateSnapshot  } from '@angular/router';
 
 
 
@@ -26,9 +28,10 @@ export class DataService {
   //     'email': 'pramalakar.2010@gmail.com'
   //   }
   // ];
+  events: EventEmitter<any> = new EventEmitter();
 
   // public weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  constructor(private http: HttpClient, private localStorage: AsyncLocalStorage) {
+  constructor(private http: HttpClient, private localStorage: AsyncLocalStorage, public router: Router) {
     // console.log('init dataservice');
     this.server = '';
     // this.user = {};
@@ -64,8 +67,7 @@ export class DataService {
     return this.localStorage.setItem(key, value);
   }
 
-  public get(key) {
-    console.log('[DataService:get]Getting: ' + key);
+  public get(key): Observable<any> {
     console.log('[DataService:get]Getting: ' + this.localStorage.getItem(key));
     return this.localStorage.getItem(key);
   }
@@ -75,8 +77,9 @@ export class DataService {
     let store = {};
     let promises = [];
     for (let key of keys) {
+      console.log('key: ' + key);
       let prom = this.localStorage.getItem(key).subscribe((value) => {
-        console.log(value);
+        console.log('value: ' + value);
         store[key] = value;
       });
       promises.push(prom);
@@ -100,16 +103,14 @@ export class DataService {
   }
 
   public getObject(key) {
-    return new Promise(function (resolve, reject) {
-      this.get(key).then(function (data) {
-        try {
-          resolve(data ? JSON.parse(data) : undefined);
-        } catch (e) {
-          reject(e);
-        }
-      }).catch(function (error) {
-        reject(error);
-      });
+    return this.localStorage.getItem(key).map(data => {
+      // .subscribe((data) => {
+      console.log('getObject');
+      try {
+        return (data ? JSON.parse(data) : undefined);
+      } catch (e) {
+        return (e);
+      }
     });
   }
 
@@ -226,7 +227,10 @@ export class DataService {
   //   });
   // }
   public logout() {
-  }
+    this.clearAllStorage().subscribe(() => {
+      this.router.navigate(['/login']);
+    });
+    }
 
   public loadUserDetails(): Observable<any> {
     return this.execute('/api/Users/GetLoggedInUser', {});
@@ -238,8 +242,8 @@ export class DataService {
   public clearLogin() {
     // console.log('Clearing login')
     // this.token = '';
-    // this.set('token', null);
-    // this.set('user', null);
+    // this.localStorage.setItem('token', null).subscribe(() => {});
+    // this.localStorage.setItem('user', null).subscribe(() => {});
   }
 
   public clearServer() {
@@ -250,7 +254,9 @@ export class DataService {
   }
 
   public clearAllStorage() {
-    // this.storage.clear();
+    return this.localStorage.clear().map(() => {
+      console.log('all storage cleared');
+    });
   }
 
   public _isNullOrUndefined(pram) {

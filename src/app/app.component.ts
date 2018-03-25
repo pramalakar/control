@@ -16,24 +16,42 @@ declare var BeagleApp: any;
 export class AppComponent implements OnInit {
 
   title = 'Admin Control App';
-
+  user;
   constructor(private dataService: DataService, public router: Router) {}
 
   ngOnInit(): void {
     BeagleApp.init();
 
     this.dataService.init().then(() => {
-      this.dataService.getAll(['token']).then(data => {
-        console.log('Checking login progress: ');
-        console.log('this is: ' + data['token']);
-        if (!isNullOrUndefined(data)) {
-          console.log('loading dashboard');
-          this.router.navigate(['/dashboard/dashboard']);
+      // this.dataService.getAll(['token']).then(data => {
+      //   console.log('Checking login progress: ');
+      //   console.log('this is: ' + data);
+      //   if (!isNullOrUndefined(data)) {
+      //     console.log('loading dashboard');
+      //     this.router.navigate(['/dashboard/dashboard']);
+      //   } else {
+      //     console.log('loading login');
+      //     this.router.navigate(['/login/login']);
+      //   }
+      // });
+      this.dataService.get('token').subscribe((data) => {
+        if (data) {
+          this.dataService.getObject('user').subscribe((user) => {
+            console.log(user.userName);
+            this.user = user;
+            this.router.navigate(['/dashboard/dashboard']);
+          }, () => {
+            // console.log('error');
+          });
         } else {
-          console.log('loading login');
           this.router.navigate(['/login/login']);
         }
       });
     });
+  }
+
+  logout() {
+    console.log('logging out');
+    this.dataService.logout();
   }
 }
