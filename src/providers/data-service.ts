@@ -1,9 +1,10 @@
 /**
  * Created by Prakash Malakar on 18/03/2018.
  */
-import {Injectable, EventEmitter} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 import {isNullOrUndefined} from 'util';
 import { AsyncLocalStorage } from 'angular-async-local-storage';
@@ -28,7 +29,9 @@ export class DataService {
   //     'email': 'pramalakar.2010@gmail.com'
   //   }
   // ];
-  events: EventEmitter<any> = new EventEmitter();
+
+  private messageSource = new BehaviorSubject<string>("default message");
+  currentMessage = this.messageSource.asObservable();
 
   // public weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   constructor(private http: HttpClient, private localStorage: AsyncLocalStorage, public router: Router) {
@@ -120,17 +123,33 @@ export class DataService {
 
   private _execute(server: String, action: String, request): Observable<any> {
     console.log('_execute');
-    // let options = {headers: new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'})};
-    let options = {
-      headers: isNullOrUndefined(this.token) ?
-        new HttpHeaders({
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        }) :
-        new HttpHeaders({
+
+    //Not working this
+    // let options = {
+    //   headers: this._isNullOrUndefined(this.token) ?
+    //     new HttpHeaders({
+    //       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    //     }) :
+    //     new HttpHeaders({
+    //       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    //       'Authorization':  'Bearer ' + this.token
+    //     })
+    // };
+    let options;
+    if (this.token) {
+      options = {
+        headers: new HttpHeaders({
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'Authorization':  'Bearer ' + this.token
         })
-        };
+      };
+    } else {
+      options = {
+        headers: new HttpHeaders({
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          })
+      };
+    }
     let path = 'http://' + 'localhost:60882' + action;
     console.log(options);
     console.log(path);
@@ -170,11 +189,11 @@ export class DataService {
         this.token = token;
         if (!isNullOrUndefined(token)) {
           console.log('[DataService:checkLoggedIn]logged in: ' + this.token);
-          // this.events.publish('user:loggedIn', true);
+          // this.loginEvent.emit('user:loggedIn' + true);
           // console.log('User Details: ' + this.loadUserDetails());
           this.loadUserDetails().subscribe((user) => {
-            console.log('user: ' + JSON.stringify(user));
             this.localStorage.setItem('user', JSON.stringify(user)).subscribe(() => {
+              this.eventEmit(user);
               // console.log('done');
             }, () => {
               // console.log('error');
@@ -227,7 +246,7 @@ export class DataService {
   //   });
   // }
   public logout() {
-    this.clearAllStorage().subscribe(() => {
+    return this.clearAllStorage().map(() => {
       this.router.navigate(['/login']);
     });
     }
@@ -254,12 +273,21 @@ export class DataService {
   }
 
   public clearAllStorage() {
+    this.token = '';
     return this.localStorage.clear().map(() => {
       console.log('all storage cleared');
     });
   }
 
   public _isNullOrUndefined(pram) {
+    console.log(pram);
+    console.log(isNullOrUndefined(pram));
     return isNullOrUndefined(pram);
+  }
+
+  eventEmit(source: any) {
+    console.log('eventEmit');
+    console.log(source);
+    this.messageSource.next(source);
   }
 }

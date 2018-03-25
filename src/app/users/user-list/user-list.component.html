@@ -7,22 +7,42 @@
     </div>
   </div>
   <div class="card-body">
-    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped table-hover table-fw-widget">
-      <thead>
-      <tr>
-        <th>Id</th>
-        <th>Email</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let user of users">
-        <td>{{ user.id }}</td>
-        <td>{{ user.email }}</td>
-      </tr>
-      </tbody>
-    </table>
+    <!--<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped table-hover table-fw-widget">-->
+      <!--<thead>-->
+      <!--<tr>-->
+        <!--<th>Username</th>-->
+        <!--<th>Email</th>-->
+      <!--</tr>-->
+      <!--</thead>-->
+      <!--<tbody>-->
+      <!--<tr *ngFor="let user of users">-->
+        <!--<td>{{ user.id }}</td>-->
+        <!--<td>{{ user.email }}</td>-->
+      <!--</tr>-->
+      <!--</tbody>-->
+    <!--</table>-->
 
 
+    <div class="card-body table-responsive">
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped table-hover table-fw-widget">
+        <thead>
+        <tr>
+          <th style="width:37%;">User</th>
+          <th style="width:36%;">Email</th>
+          <th>Contact</th>
+          <th class="actions"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of users">
+          <td class="user-avatar"> <img src="assets/img/avatar6.png" alt="Avatar">{{ user.userName }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.phoneNumber ? user.phoneNumber : '-' }}</td>
+          <td class="actions"><a href="#" class="icon"><i class="mdi mdi-github-alt"></i></a></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
 
   </div>
 </div>

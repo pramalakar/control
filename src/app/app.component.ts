@@ -16,11 +16,15 @@ declare var BeagleApp: any;
 export class AppComponent implements OnInit {
 
   title = 'Admin Control App';
-  user;
+  user: any = '';
   constructor(private dataService: DataService, public router: Router) {}
 
   ngOnInit(): void {
     BeagleApp.init();
+
+    this.dataService.currentMessage.subscribe(data => {
+      this.user = data;
+    });
 
     this.dataService.init().then(() => {
       // this.dataService.getAll(['token']).then(data => {
@@ -52,6 +56,8 @@ export class AppComponent implements OnInit {
 
   logout() {
     console.log('logging out');
-    this.dataService.logout();
+    this.dataService.logout().subscribe(() => {
+      this.user = '';
+    });
   }
 }
