@@ -11,14 +11,13 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 })
 export class UserListComponent  {
 
-  readonly ROOT_URL = 'http://localhost:60882';
   users: any;
   constructor(private dataService: DataService, private http: HttpClient) {
     this.getUsers();
   }
 
   getUsers() {
-    this.dataService.execute('/api/users/GetAllUsers', {}).subscribe((data) => {
+    this.dataService.execute('post', '/api/users/GetAllUsers', {}).subscribe((data) => {
       this.users = data;
     });
   }

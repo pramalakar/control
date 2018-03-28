@@ -24,7 +24,7 @@ export class WidgetComponent implements OnInit {
   }
 
   getWidgets(id: number) {
-    this.dataService.execute('/api/Widget/GetWidget?id=' + id, {}).subscribe((data) => {
+    this.dataService.execute('post', '/api/Widget/GetWidget?id=' + id, {}).subscribe((data) => {
       this.widgetRows = data;
     });
   }

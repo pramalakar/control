@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
   login(loginForm) {
     console.log(loginForm);
     let req = 'username=' + loginForm.value.username + '&password=' + loginForm.value.password + '&grant_type=password';
-    this.dataService.execute('/token', req).subscribe((data) => {
+    this.dataService.execute('post', '/token', req).subscribe((data) => {
       let token = data['access_token'];
       if (token) {
         this.localStorage.setItem('token', token).subscribe(() => {
