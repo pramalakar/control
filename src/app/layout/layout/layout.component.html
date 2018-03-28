@@ -1,9 +1,44 @@
+<!--Add new layout-->
+<div class="row">
+  <div class="col-md-12">
+    <div id="collapseOne" aria-labelledby="headingOne" class="collapse">
+      <div class="card card-border-color card-border-color-primary">
+      <div class="card-header card-header-divider">Create New Layout<span class="card-subtitle">Add a new layout here</span></div>
+      <div class="card-body">
+        <form [formGroup]="layoutForm" (ngSubmit)="addLayout(layoutForm)">
+          <div class="form-group row">
+            <label for="layout-name" class="col-12 col-sm-3 col-form-label text-sm-right">Name</label>
+            <div class="col-12 col-sm-8 col-lg-6">
+              <input formControlName="layoutName" type="text" class="form-control" id="layout-name">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="layout-description" class="col-12 col-sm-3 col-form-label text-sm-right">Description</label>
+            <div class="col-12 col-sm-8 col-lg-6">
+              <input formControlName="layoutDescription" type="text" class="form-control" id="layout-description">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a  data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="btn btn-secondary">Cancel</a>
+            <button type="submit" [disabled]="layoutForm.invalid" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="btn btn-success">Add</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<!--Layout List-->
 <div class="row">
   <div class="col-12">
     <div class="card card-table">
       <div class="card-header">
-        <div class="tools dropdown"> <span class="icon mdi mdi-download"></span><a href="#" role="button" data-toggle="dropdown" class="dropdown-toggle"><span class="icon mdi mdi-more-vert"></span></a>
-          <div role="menu" class="dropdown-menu"><a href="#" class="dropdown-item">Action</a><a href="#" class="dropdown-item">Another action</a><a href="#" class="dropdown-item">Something else here</a>
+        <div class="tools dropdown">
+          <span class="icon mdi mdi-download"></span><a href="#" role="button" data-toggle="dropdown" class="dropdown-toggle"><span class="icon mdi mdi-more-vert"></span></a>
+          <a data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><span class="icon mdi mdi-plus"></span></a>
+          <div role="menu" class="dropdown-menu"><a href="#" class="dropdown-item">Action</a><a href="#" class="dropdown-item">Another action</a>
+            <a href="#" class="dropdown-item">Something else here</a>
             <div class="dropdown-divider"></div><a href="#" class="dropdown-item">Separated link</a>
           </div>
         </div>
@@ -16,17 +51,31 @@
             <th>Name</th>
             <th style="width:40%;">Description</th>
             <th style="width:20%;">Date</th>
-            <th style="width:20%;">State</th>
-            <th style="width:5%;" class="actions"></th>
+            <th style="width:5%;">State</th>
+            <th style="width:20%;" class="actions"></th>
           </tr>
           </thead>
           <tbody class="no-border-x">
-          <tr *ngFor="let layout of layouts">
-            <td><a [routerLink]="['/layout/widget', layout.id]">{{layout.id}}{{layout.name}}</a></td>
+          <tr *ngFor="let layout of layouts; let i = index">
+            <td><a [routerLink]="['/layout/widget', layout.id]">{{layout.name}}</a></td>
             <td>{{layout.description}}</td>
             <td>Aug 23, 2016</td>
             <td class="text-success">Active</td>
-            <td class="actions"><a href="#" class="icon"><i class="mdi mdi-plus-circle-o"></i></a></td>
+            <td class="actions">
+              <div class="widget-head">
+                <div class="tools"><span (click)="editLayout(i)" class="icon mdi mdi-edit"></span><span (click)="deleteLayout(i, layout.id)" class="icon mdi mdi-close"></span></div>
+              </div>
+              <!--<a (click)="editLayout(i)">-->
+                <!--<div class="icon-container icons">-->
+                  <!--<div class="icon"><span class="mdi mdi-edit"></span></div><span class="icon-class">edit</span>-->
+                <!--</div>-->
+              <!--</a>-->
+              <!--<a (click)="deleteLayout(i, layout.id)">-->
+                <!--<div class="icon-container">-->
+                  <!--<div class="icon"><span class="mdi mdi-delete"></span></div>-->
+                <!--</div>-->
+              <!--</a>-->
+            </td>
           </tr>
           </tbody>
         </table>
