@@ -117,11 +117,11 @@ export class DataService {
     });
   }
 
-  public execute(action, request) {
-    return this._execute(this.server, action, request);
+  public execute(method, action, request) {
+    return this._execute(this.server, method, action, request);
   }
 
-  private _execute(server: String, action: String, request): Observable<any> {
+  private _execute(server: String, method: String, action: String, request): Observable<any> {
     console.log('_execute');
 
     //Not working this
@@ -153,7 +153,11 @@ export class DataService {
     let path = 'http://' + 'localhost:60882' + action;
     console.log(options);
     console.log(path);
-    return this.http.post(path, request, options);
+    if (method == 'post') {
+      return this.http.post(path, request, options);
+    } else if (method == 'delete') {
+      return this.http.delete(path, options);
+    }
   }
 
   public login(loginForm) {
@@ -163,7 +167,7 @@ export class DataService {
     let req = 'username=' + loginForm.username + '&password=' + loginForm.password + '&grant_type=password';
     // return new Promise(function (resolve, reject) {
       console.log('login');
-      this.execute('/token', req).subscribe((data) => {
+      this.execute('post', '/token', req).subscribe((data) => {
         this.token = data['access_token'];
         if (this.token) {
           this.localStorage.setItem('token', this.token).subscribe(() => {
@@ -252,7 +256,7 @@ export class DataService {
     }
 
   public loadUserDetails(): Observable<any> {
-    return this.execute('/api/Users/GetLoggedInUser', {});
+    return this.execute('post', '/api/Users/GetLoggedInUser', {});
   }
 
   public loadAppDetails() {
