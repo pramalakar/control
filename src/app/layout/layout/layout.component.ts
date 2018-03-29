@@ -67,6 +67,7 @@ export class LayoutComponent implements OnInit {
       const elementPos = this.layouts.map(function(x) {return x.id; }).indexOf(layoutForm.value.layoutId);
       console.log(this.layouts[elementPos]);
       this.layouts[elementPos] = {
+        id: layoutForm.value.layoutId,
         name: layoutForm.value.layoutName,
         description: layoutForm.value.layoutDescription,
         statusID: layoutForm.value.layoutStatusId
@@ -84,9 +85,21 @@ export class LayoutComponent implements OnInit {
   activateLayout(layoutId) {
     console.log('activate layout');
     this.dataService.execute('post', '/api/Layout/ActivateLayout?id=' + layoutId, {}).subscribe((data) => {
-      console.log(data);
-      const elementPos = this.layouts.map(function(x) {return x.id; }).indexOf(data.id);
-      this.layouts[elementPos] = data;
+
+      const elementPos1 = this.layouts.map(function(x) {return x.id; }).indexOf(data.inactiveId);
+      this.layouts[elementPos1] = {
+        id: this.layouts[elementPos1].id,
+        name: this.layouts[elementPos1].name,
+        description: this.layouts[elementPos1].description,
+        statusID: 0
+      };
+      const elementPos2 = this.layouts.map(function(x) {return x.id; }).indexOf(data.activeId);
+      this.layouts[elementPos2] = {
+        id: this.layouts[elementPos2].id,
+        name: this.layouts[elementPos2].name,
+        description: this.layouts[elementPos2].description,
+        statusID: 1
+      };
     });
   }
 
