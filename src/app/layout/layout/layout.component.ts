@@ -81,6 +81,15 @@ export class LayoutComponent implements OnInit {
     });
   }
 
+  activateLayout(layoutId) {
+    console.log('activate layout');
+    this.dataService.execute('post', '/api/Layout/ActivateLayout?id=' + layoutId, {}).subscribe((data) => {
+      console.log(data);
+      const elementPos = this.layouts.map(function(x) {return x.id; }).indexOf(data.id);
+      this.layouts[elementPos] = data;
+    });
+  }
+
   clearLaoutForm() {
     this.layoutForm.setValue({
       layoutId: '',
