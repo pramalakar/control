@@ -146,17 +146,19 @@ export class DataService {
     } else {
       options = {
         headers: new HttpHeaders({
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          })
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        })
       };
     }
     let path = 'http://' + 'localhost:60882' + action;
     console.log(options);
     console.log(path);
-    if (method == 'post') {
+    if (method === 'post') {
       return this.http.post(path, request, options);
-    } else if (method == 'delete') {
+    } else if (method === 'delete') {
       return this.http.delete(path, options);
+    } else if (method === 'put') {
+      return this.http.put(path, request, options);
     }
   }
 
@@ -166,22 +168,22 @@ export class DataService {
     // this.uuid = uuid;
     let req = 'username=' + loginForm.username + '&password=' + loginForm.password + '&grant_type=password';
     // return new Promise(function (resolve, reject) {
-      console.log('login');
-      this.execute('post', '/token', req).subscribe((data) => {
-        this.token = data['access_token'];
-        if (this.token) {
-          this.localStorage.setItem('token', this.token).subscribe(() => {
-              this.checkLoggedIn().then(() => {
-                console.log('checkLoggedIn returned true');
-                return (this.user);
-              });
-          }, () => {
-            console.log('error');
+    console.log('login');
+    this.execute('post', '/token', req).subscribe((data) => {
+      this.token = data['access_token'];
+      if (this.token) {
+        this.localStorage.setItem('token', this.token).subscribe(() => {
+          this.checkLoggedIn().then(() => {
+            console.log('checkLoggedIn returned true');
+            return (this.user);
           });
-        } else {
-          console.log ('Login failed');
-        }
-      });
+        }, () => {
+          console.log('error');
+        });
+      } else {
+        console.log ('Login failed');
+      }
+    });
     // });
   }
   public checkLoggedIn(): Promise<any> {
@@ -253,7 +255,7 @@ export class DataService {
     return this.clearAllStorage().map(() => {
       this.router.navigate(['/login']);
     });
-    }
+  }
 
   public loadUserDetails(): Observable<any> {
     return this.execute('post', '/api/Users/GetLoggedInUser', {});

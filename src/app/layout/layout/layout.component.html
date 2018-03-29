@@ -5,7 +5,11 @@
       <div class="card card-border-color card-border-color-primary">
       <div class="card-header card-header-divider">Create New Layout<span class="card-subtitle">Add a new layout here</span></div>
       <div class="card-body">
-        <form [formGroup]="layoutForm" (ngSubmit)="addLayout(layoutForm)">
+        <form [formGroup]="layoutForm" (ngSubmit)="mode == 'add' ? addLayout(layoutForm) : mode == 'update' ? updateLayout(layoutForm) : ''">
+          <div class="form-group row" hidden>
+              <input formControlName="layoutId" type="text" class="form-control" id="layout-id">
+              <input formControlName="layoutStatusId" type="text" class="form-control" id="layout-statusId">
+          </div>
           <div class="form-group row">
             <label for="layout-name" class="col-12 col-sm-3 col-form-label text-sm-right">Name</label>
             <div class="col-12 col-sm-8 col-lg-6">
@@ -20,7 +24,9 @@
           </div>
           <div class="modal-footer">
             <a  data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="btn btn-secondary">Cancel</a>
-            <button type="submit" [disabled]="layoutForm.invalid" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="btn btn-success">Add</button>
+            <button type="submit" [disabled]="layoutForm.invalid" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="btn btn-success">
+              {{mode == 'add' ? 'Add' : mode == 'update' ? 'Update' : ''}}
+            </button>
           </div>
         </form>
       </div>
@@ -36,7 +42,7 @@
       <div class="card-header">
         <div class="tools dropdown">
           <span class="icon mdi mdi-download"></span><a href="#" role="button" data-toggle="dropdown" class="dropdown-toggle"><span class="icon mdi mdi-more-vert"></span></a>
-          <a data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><span class="icon mdi mdi-plus"></span></a>
+          <a (click)="openAddForm()" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><span class="icon mdi mdi-plus"></span></a>
           <div role="menu" class="dropdown-menu"><a href="#" class="dropdown-item">Action</a><a href="#" class="dropdown-item">Another action</a>
             <a href="#" class="dropdown-item">Something else here</a>
             <div class="dropdown-divider"></div><a href="#" class="dropdown-item">Separated link</a>
@@ -60,10 +66,10 @@
             <td><a [routerLink]="['/layout/widget', layout.id]">{{layout.name}}</a></td>
             <td>{{layout.description}}</td>
             <td>Aug 23, 2016</td>
-            <td class="text-success">Active</td>
+            <td class="text-success">{{layout.statusID == 1 ? 'Active' : layout.statusID == 0 ? 'Inactive' : layout.statusID == 2 ? 'Deleted' : ''}}</td>
             <td class="actions">
               <div class="widget-head">
-                <div class="tools"><span (click)="editLayout(i)" class="icon mdi mdi-edit"></span><span (click)="deleteLayout(i, layout.id)" class="icon mdi mdi-close"></span></div>
+                <div class="tools"><span (click)="openUpdateForm(i)" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="icon mdi mdi-edit"></span><span (click)="deleteLayout(i, layout.id)" class="icon mdi mdi-close"></span></div>
               </div>
               <!--<a (click)="editLayout(i)">-->
                 <!--<div class="icon-container icons">-->
