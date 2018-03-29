@@ -1,41 +1,95 @@
-<div class="row" *ngFor="let widgetRow of widgetRows">
-  <div class="col-12"
-       [ngClass]="widgetRow.widget.length==1?'col-lg-12':widgetRow.widget.length==2?'col-lg-6':'col-lg-4'"
-       *ngFor="let widgetItem of widgetRow.widget">
-    <div class="widget be-loading">
-      <div class="widget-head">
-        <div class="tools"><span class="icon mdi mdi-chevron-down"></span><span class="icon mdi mdi-refresh-sync toggle-loading"></span><span class="icon mdi mdi-close"></span></div>
-        <div class="title">{{widgetItem.id}}</div>
-      </div>
-      <div class="widget-chart-container">
-        <div id="top-sales" style="height: 178px;"></div>
-        <div class="chart-pie-counter">36</div>
-      </div>
-      <div class="chart-legend">
-        <table>
-          <tr>
-            <td class="chart-legend-color"><span data-color="top-sales-color1"></span></td>
-            <td>Premium Purchases</td>
-            <td class="chart-legend-value">125</td>
-          </tr>
-          <tr>
-            <td class="chart-legend-color"><span data-color="top-sales-color2"></span></td>
-            <td>Standard Plans</td>
-            <td class="chart-legend-value">1569</td>
-          </tr>
-          <tr>
-            <td class="chart-legend-color"><span data-color="top-sales-color3"></span></td>
-            <td>Services</td>
-            <td class="chart-legend-value">824</td>
-          </tr>
-        </table>
-      </div>
-      <div class="be-spinner">
-        <svg width="40px" height="40px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-          <circle fill="none" stroke-width="4" stroke-linecap="round" cx="33" cy="33" r="30" class="circle"></circle>
-        </svg>
+<!--Accordions-->
+<div class="row">
+  <div class="col-12">
+    <div id="accordion" class="accordion">
+      <div class="card" *ngFor="let widgetRow of widgetRows; let rowi = index">
+        <div id="headingOne" class="card-header">
+          <button data-toggle="collapse" [attr.data-target]="'#' + widgetRow.id" [attr.aria-expanded]="i == 0" aria-controls="collapseOne" class="btn">
+            <i class="icon mdi mdi-chevron-right"></i>
+            <ng-container *ngIf="updateRowIndex !== rowi;else updateWidgetRow">
+              {{widgetRow.title}}
+            </ng-container>
+
+            <ng-template #updateWidgetRow>
+              <!--<form [formGroup]="this.widgetRowForm" (ngSubmit)="updateWidgetRow(this.widgetRowForm)">-->
+                <!--<div class="input-group">-->
+                  <!--<input (click)="$event.stopPropagation()" formControlName="title" type="text" class="form-control">-->
+                  <!--<div class="input-group-append">-->
+                    <!--<span class="input-group-text">-->
+                    <!--</span>-->
+                  <!--</div>-->
+                  <!--<div class="icon-container">-->
+                    <!--<div class="icon"><span type="submit" (click)="$event.stopPropagation()" class="mdi mdi-check"></span></div><span class="icon-class"></span>-->
+                  <!--</div>-->
+                  <!--<div class="icon-container">-->
+                    <!--<div class="icon"><span (click)="restoreRowMode();$event.stopPropagation()" class="mdi mdi-close"></span></div><span class="icon-class"></span>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</form>-->
+            </ng-template>
+            <div class="tools">
+              <i (click)="addBlankWidget(rowi);  $event.stopPropagation()" class="icon mdi mdi-plus"></i>
+              <i (click)="changeRowMode(rowi);  $event.stopPropagation()" class="icon mdi mdi-edit"></i>
+              <i (click)="removeWidgetRow(rowi);  $event.stopPropagation()" class="icon mdi mdi-close"></i>
+            </div>
+          </button>
+        </div>
+        <div [attr.id]="widgetRow.id" aria-labelledby="headingOne" data-parent="#accordion" class="collapse" [ngClass]="i == 0 ? 'show' : ''">
+          <div class="row">
+            <div class="col-12"
+               [ngClass]="widgetRow.widget.length==1?'col-lg-12':widgetRow.widget.length==2?'col-lg-6':'col-lg-4'"
+               *ngFor="let widgetItem of widgetRow.widget; let widgeti = index">
+            <div class="widget be-loading">
+              <div class="widget-head">
+                <div class="tools"><span class="icon mdi mdi-edit"></span><span (click)="removeWidget(rowi, widgeti);" class="icon mdi mdi-close"></span></div>
+                <div class="title">{{widgetItem.id}}</div>
+              </div>
+              <div class="widget-chart-container">
+                <div id="top-sales" style="height: 178px;"></div>
+                <div class="chart-pie-counter">36</div>
+              </div>
+              <div class="chart-legend">
+                <table>
+                  <tr>
+                    <td class="chart-legend-color"><span data-color="top-sales-color1"></span></td>
+                    <td>Premium Purchases</td>
+                    <td class="chart-legend-value">125</td>
+                  </tr>
+                  <tr>
+                    <td class="chart-legend-color"><span data-color="top-sales-color2"></span></td>
+                    <td>Standard Plans</td>
+                    <td class="chart-legend-value">1569</td>
+                  </tr>
+                  <tr>
+                    <td class="chart-legend-color"><span data-color="top-sales-color3"></span></td>
+                    <td>Services</td>
+                    <td class="chart-legend-value">824</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="be-spinner">
+                <svg width="40px" height="40px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                  <circle fill="none" stroke-width="4" stroke-linecap="round" cx="33" cy="33" r="30" class="circle"></circle>
+                </svg>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
+<div class="row">
+  <div class="col-12">
+    <div class="accordion">
+      <div class="card">
+        <div class="card-header">
+          <button class="btn text-center" (click)="addBlankWidgetRow()">
+            <span class="icon mdi mdi-plus"></span> Add new row
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

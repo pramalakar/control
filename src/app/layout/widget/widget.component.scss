@@ -1,0 +1,24 @@
+.card{
+  background-color: #eee;
+}
+.input-group{
+  display: inline-flex !important;
+  width: 50% !important;
+  input{
+    width: auto !important;
+  }
+}
+.tools{
+  display: inline !important;
+}
+#widgetRowForm{
+  display: inline !important;
+  .icon-container{
+    padding: 0;
+    background-color: transparent;
+  }
+}
+.accordion .card-header button[aria-expanded='true'] #widgetRowForm .icon {
+  -webkit-transform: rotate(0deg);
+  transform: rotate(0);
+}
