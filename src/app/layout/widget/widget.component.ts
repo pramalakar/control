@@ -4,7 +4,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 import {Widget} from '../../../models/widget.model';
 import {WidgetRow} from '../../../models/widget-row.model';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 
 
 
@@ -19,32 +19,70 @@ export class WidgetComponent implements OnInit {
 
   updateRowIndex;
   widgetRowForm: FormGroup;
-  constructor(private dataService: DataService, private route: ActivatedRoute) { }
 
+
+  items: WidgetRow[] = [];
+  queryForm: FormGroup;
+  constructor(private dataService: DataService, private route: ActivatedRoute, private fb: FormBuilder) { }
+
+
+  //NEED
   ngOnInit() {
-    this.initWidgetRowForm();
-
-    this.id = this.route.params.subscribe(params => {
+    // this.initWidgetRowForm();
+    this.queryForm = this.fb.group({
+      arrayOfData: this.fb.array([])
+    });
+    this.route.params.subscribe(params => {
       this.id = +params['id']; // (+) converts string 'id' to a number
-      console.log(this.id);
       // In a real app: dispatch action to load the details here.
       this.getWidgets(this.id);
+    });
+  }
+  patchValues() {
+    const control = <FormArray>this.queryForm.controls.arrayOfData;
+    this.items.forEach(x => {
+      control.push(this.patchValue(x.id, x.title, x.order, x.layoutId, x.widget));
+    });
+  }
+  patchValue(id, title, order, layoutId, widget) {
+    return this.fb.group({
+      id: [id],
+      title: [title],
+      order: [order],
+      layoutId: [layoutId],
+      widget: [widget]
     });
   }
 
   getWidgets(id: number) {
     this.dataService.execute('post', '/api/Widget/GetWidget?id=' + id, {}).subscribe((data) => {
-      console.log(data);
-      this.widgetRows = data;
+      this.items = data;
+      this.patchValues();
     });
   }
+  //NEED END
 
   // WIDGET ROW AREA
   addBlankWidgetRow() {
-    this.widgetRows.push(new WidgetRow(0, 'Title', this.widgetRows.length));
+    debugger;
+    const control = <FormArray>this.queryForm.controls.arrayOfData;
+    // this.items.push(this.patchValue('', 'Title here', this.items.length + 1, this.id, []));
+    // const control = <FormArray>this.queryForm.controls.arrayOfData;
+    // control.push(this.fb.group({
+    //     arrayOfData: this.fb.array([])
+    //   })
+    // );
+    const req =
+      'title=' + '' +
+      '&order=' + (control.length + 1) +
+      '&layoutId=' + this.id;
+    this.dataService.execute('post', '/api/WidgetRow/CreateWidgetRow', req).subscribe((data) => {
+      control.push(this.patchValue(data.id, 'Title here', data.order, data.layoutId, data.widget));
+    });
   }
   changeRowMode(i) {
     this.updateRowIndex = i;
+    console.log(this.updateRowIndex);
     // this.widgetRowForm.setValue({
     //   id: this.widgetRows[i].id,
     //   title: this.widgetRows[i].title,
@@ -53,46 +91,50 @@ export class WidgetComponent implements OnInit {
   }
   restoreRowMode() {
     this.updateRowIndex = '';
-    this.initWidgetRowForm();
+    // this.initWidgetRowForm();
   }
 
-  // updateWidgetRow() {
-  //   const req = 'id=' + this.widgetRowForm.value.id +
-  //     '&title=' + this.widgetRowForm.value.title +
-  //     '&order=' + this.widgetRowForm.value.order +
-  //     '&layoutId=' + this.widgetRowForm.value.layoutId;
-  //   this.dataService.execute('put', '/api/WidgetRow/UpdateWidgetRow?id=' + this.widgetRowForm.value.id, req).subscribe(() => {
-  //     console.log('ladorupa');
-  //     // const elementPos = this.layouts.map(function(x) {return x.id; }).indexOf(layoutForm.value.layoutId);
-  //     // console.log(this.layouts[elementPos]);
-  //     // this.layouts[elementPos] = {
-  //     //   id: layoutForm.value.layoutId,
-  //     //   name: layoutForm.value.layoutName,
-  //     //   description: layoutForm.value.layoutDescription,
-  //     //   statusID: layoutForm.value.layoutStatusId
-  //     // };
-  //     // this.clearLaoutForm();
-  //   });
-  // }
-  removeWidgetRow(rowi) {
-    this.widgetRows.splice(rowi, 1);
+  updateWidgetRow(queryForm) {
+    const data = queryForm.controls.arrayOfData.value[this.updateRowIndex];
+    console.log(data);
+    const req = 'id=' + data.id +
+      '&title=' + data.title +
+      '&order=' + data.order +
+      '&layoutId=' + data.layoutId;
+    this.dataService.execute('put', '/api/WidgetRow/UpdateWidgetRow?id=' + data.id, req).subscribe(() => {
+      this.updateRowIndex = '';
+    });
+  }
+  removeWidgetRow(id) {
+    console.log(this.items.findIndex(item => item.id === id));
+
+    this.dataService.execute('delete', '/api/WidgetRow/DeleteWidgetRow?id=' + id, {}).subscribe(() => {
+      const control = <FormArray>this.queryForm.controls.arrayOfData;
+      control.removeAt(this.items.findIndex(item => item.id === id));
+    });
   }
   // WIDGET AREA
   addBlankWidget(rowi) {
-    this.widgetRows[rowi].widget.push(new Widget(0, '', 0, '', '', ''));
+    // this.widgetRows[rowi].widget.push(new Widget(0, '', 0, '', '', ''));
+    // const control = <FormArray>this.queryForm.controls.arrayOfData;
+    // queryForm.value.arrayOfData[rowi].push(new Widget(0, '', 0, '', '', ''));
+
   }
 
-  removeWidget(rowi, widgeti) {
+  removeWidget(rowi, widgeti, id) {
     console.log(widgeti);
-    this.widgetRows[rowi].widget.splice(widgeti, 1);
-  }
-
-  initWidgetRowForm() {
-    this.widgetRowForm = new FormGroup({
-      id: new FormControl(),
-      title: new FormControl('', Validators.required),
-      order: new FormControl()
+    // this.widgetRows[rowi].widget.splice(widgeti, 1);
+    this.dataService.execute('delete', '/api/Widget/DeleteWidget?id=' + id, {}).subscribe(() => {
+      // this.updateRowIndex = '';
     });
   }
+
+  // initWidgetRowForm() {
+  //   this.widgetRowForm = new FormGroup({
+  //     id: new FormControl(),
+  //     title: new FormControl('', Validators.required),
+  //     order: new FormControl()
+  //   });
+  // }
 }
 

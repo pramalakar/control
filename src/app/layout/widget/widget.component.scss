@@ -1,5 +1,5 @@
-.card{
-  background-color: #eee;
+#accordion .card{
+  //background-color: #fafafa;
 }
 .input-group{
   display: inline-flex !important;
@@ -11,14 +11,22 @@
 .tools{
   display: inline !important;
 }
-#widgetRowForm{
+form{
   display: inline !important;
-  .icon-container{
-    padding: 0;
-    background-color: transparent;
-  }
 }
 .accordion .card-header button[aria-expanded='true'] #widgetRowForm .icon {
   -webkit-transform: rotate(0deg);
   transform: rotate(0);
+}
+.icon-container{
+  padding: 0 !important;
+  background-color: transparent;
+}
+
+.widget img{
+  min-height: 100%;
+  min-width: 100%;
+}
+.widget-chart-container{
+  overflow: hidden;
 }

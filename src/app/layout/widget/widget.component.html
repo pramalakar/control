@@ -1,93 +1,130 @@
-<!--Accordions-->
+<form [formGroup]="queryForm">
+
+
+
+
+  <!--(ngSubmit)="updateWidgetRow(queryForm)"-->
+        <div class="row">
+          <div class="col-12">
+            <div id="accordion" class="accordion">
+
+              <div formArrayName="arrayOfData">
+                <div *ngFor="let code of queryForm.controls.arrayOfData.controls; let rowi = index">
+                  <div formGroupName="{{rowi}}">
+                    <div class="card">
+                      <div id="headingOne" class="card-header">
+                        <button data-toggle="collapse" [attr.data-target]="'#' + rowi" [attr.aria-expanded]="rowi == 0" aria-controls="collapseOne" class="btn">
+                          <i class="icon mdi mdi-chevron-right"></i>
+
+                          <!--display mode-->
+                          <span *ngIf="rowi !== updateRowIndex; else elseBlock">{{queryForm.value.arrayOfData[rowi].title}}</span>
+                          <!--edit mode-->
+                          <ng-template #elseBlock>
+                            <div class="input-group">
+                              <input (click)="$event.stopPropagation()" formControlName="title" type="text" class="form-control">
+                              <div class="icon-container">
+                                <div class="icon"><span  (click)="updateWidgetRow(queryForm); $event.stopPropagation()" class="mdi mdi-check"></span></div><span class="icon-class"></span>
+                              </div>
+                              <div class="icon-container">
+                                <div class="icon"><span (click)="restoreRowMode();$event.stopPropagation()" class="mdi mdi-close"></span></div><span class="icon-class"></span>
+                              </div>
+                            </div>
+                          </ng-template>
+
+                          <div class="tools">
+                            <i (click)="addBlankWidget(rowi);  $event.stopPropagation()" class="icon mdi mdi-plus"></i>
+                            <i (click)="changeRowMode(rowi); $event.stopPropagation();" class="icon mdi mdi-edit"></i>
+                            <i (click)="removeWidgetRow(queryForm.value.arrayOfData[rowi].id);  $event.stopPropagation()" class="icon mdi mdi-close"></i>
+                          </div>
+                        </button>
+                      </div>
+                      <div [attr.id]="rowi" aria-labelledby="headingOne" data-parent="#accordion" class="collapse" [ngClass]="rowi == 0 ? 'show' : ''">
+                        <div class="row">
+                          <div class="col-12"
+                               [ngClass]="code.length==1?'col-lg-12':code.length==2?'col-lg-6':'col-lg-4'"
+                               *ngFor="let widgetItem of queryForm.value.arrayOfData[rowi].widget; let widgeti = index">
+                            <div class="widget be-loading">
+                              <div class="widget-head">
+                                <div class="tools"><span class="icon mdi mdi-edit"></span><span (click)="removeWidget(rowi, widgeti, widgetItem.id);" class="icon mdi mdi-close"></span></div>
+                                <div class="title">{{widgetItem.id}}</div>
+                              </div>
+                              <div class="widget-chart-container">
+                                <div id="top-sales" style="height: 178px;">
+                                  <img *ngIf="widgetItem.image" [src]="widgetItem.image" alt="">
+                                </div>
+                                <div class="chart-pie-counter">36</div>
+                              </div>
+                              <div class="chart-legend">
+                                <table>
+                                  <tr>
+                                    <td class="chart-legend-color"><span data-color="top-sales-color1"></span></td>
+                                    <td>Premium Purchases</td>
+                                    <td class="chart-legend-value">125</td>
+                                  </tr>
+                                  <tr>
+                                    <td class="chart-legend-color"><span data-color="top-sales-color2"></span></td>
+                                    <td>Standard Plans</td>
+                                    <td class="chart-legend-value">1569</td>
+                                  </tr>
+                                  <tr>
+                                    <td class="chart-legend-color"><span data-color="top-sales-color3"></span></td>
+                                    <td>Services</td>
+                                    <td class="chart-legend-value">824</td>
+                                  </tr>
+                                </table>
+                              </div>
+                              <div class="be-spinner">
+                                <svg width="40px" height="40px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                                  <circle fill="none" stroke-width="4" stroke-linecap="round" cx="33" cy="33" r="30" class="circle"></circle>
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+
+
+
+            </div>
+          </div>
+        </div>
+
+
+
+      </div>
+</form>
+
+
 <div class="row">
   <div class="col-12">
-    <div id="accordion" class="accordion">
-      <div class="card" *ngFor="let widgetRow of widgetRows; let rowi = index">
-        <div id="headingOne" class="card-header">
-          <button data-toggle="collapse" [attr.data-target]="'#' + widgetRow.id" [attr.aria-expanded]="i == 0" aria-controls="collapseOne" class="btn">
-            <i class="icon mdi mdi-chevron-right"></i>
-            <ng-container *ngIf="updateRowIndex !== rowi;else updateWidgetRow">
-              {{widgetRow.title}}
-            </ng-container>
-
-            <ng-template #updateWidgetRow>
-              <!--<form [formGroup]="this.widgetRowForm" (ngSubmit)="updateWidgetRow(this.widgetRowForm)">-->
-                <!--<div class="input-group">-->
-                  <!--<input (click)="$event.stopPropagation()" formControlName="title" type="text" class="form-control">-->
-                  <!--<div class="input-group-append">-->
-                    <!--<span class="input-group-text">-->
-                    <!--</span>-->
-                  <!--</div>-->
-                  <!--<div class="icon-container">-->
-                    <!--<div class="icon"><span type="submit" (click)="$event.stopPropagation()" class="mdi mdi-check"></span></div><span class="icon-class"></span>-->
-                  <!--</div>-->
-                  <!--<div class="icon-container">-->
-                    <!--<div class="icon"><span (click)="restoreRowMode();$event.stopPropagation()" class="mdi mdi-close"></span></div><span class="icon-class"></span>-->
-                  <!--</div>-->
-                <!--</div>-->
-              <!--</form>-->
-            </ng-template>
-            <div class="tools">
-              <i (click)="addBlankWidget(rowi);  $event.stopPropagation()" class="icon mdi mdi-plus"></i>
-              <i (click)="changeRowMode(rowi);  $event.stopPropagation()" class="icon mdi mdi-edit"></i>
-              <i (click)="removeWidgetRow(rowi);  $event.stopPropagation()" class="icon mdi mdi-close"></i>
-            </div>
+    <div class="accordion">
+      <div class="card card-full-primary">
+        <div class="card-header">
+          <button class="btn text-center" (click)="addBlankWidgetRow()">
+            <span class="icon mdi mdi-plus"></span> Add new row
           </button>
-        </div>
-        <div [attr.id]="widgetRow.id" aria-labelledby="headingOne" data-parent="#accordion" class="collapse" [ngClass]="i == 0 ? 'show' : ''">
-          <div class="row">
-            <div class="col-12"
-               [ngClass]="widgetRow.widget.length==1?'col-lg-12':widgetRow.widget.length==2?'col-lg-6':'col-lg-4'"
-               *ngFor="let widgetItem of widgetRow.widget; let widgeti = index">
-            <div class="widget be-loading">
-              <div class="widget-head">
-                <div class="tools"><span class="icon mdi mdi-edit"></span><span (click)="removeWidget(rowi, widgeti);" class="icon mdi mdi-close"></span></div>
-                <div class="title">{{widgetItem.id}}</div>
-              </div>
-              <div class="widget-chart-container">
-                <div id="top-sales" style="height: 178px;"></div>
-                <div class="chart-pie-counter">36</div>
-              </div>
-              <div class="chart-legend">
-                <table>
-                  <tr>
-                    <td class="chart-legend-color"><span data-color="top-sales-color1"></span></td>
-                    <td>Premium Purchases</td>
-                    <td class="chart-legend-value">125</td>
-                  </tr>
-                  <tr>
-                    <td class="chart-legend-color"><span data-color="top-sales-color2"></span></td>
-                    <td>Standard Plans</td>
-                    <td class="chart-legend-value">1569</td>
-                  </tr>
-                  <tr>
-                    <td class="chart-legend-color"><span data-color="top-sales-color3"></span></td>
-                    <td>Services</td>
-                    <td class="chart-legend-value">824</td>
-                  </tr>
-                </table>
-              </div>
-              <div class="be-spinner">
-                <svg width="40px" height="40px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                  <circle fill="none" stroke-width="4" stroke-linecap="round" cx="33" cy="33" r="30" class="circle"></circle>
-                </svg>
-              </div>
-            </div>
-          </div>
-          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 <div class="row">
   <div class="col-12">
-    <div class="accordion">
+    <div id="accordion2" class="accordion">
       <div class="card">
-        <div class="card-header">
-          <button class="btn text-center" (click)="addBlankWidgetRow()">
-            <span class="icon mdi mdi-plus"></span> Add new row
-          </button>
+        <div id="headingOne2" class="card-header">
+          <button data-toggle="collapse" data-target="#collapseOne2" aria-expanded="false" aria-controls="collapseOne2" class="btn"><i class="icon mdi mdi-chevron-right"></i> JSON RESULT</button>
+        </div>
+        <div id="collapseOne2" aria-labelledby="headingOne2" data-parent="#accordion2" class="collapse">
+          <div class="card-body">
+            <pre>{{queryForm.value | json}}</pre>
+          </div>
         </div>
       </div>
     </div>
