@@ -137,4 +137,5 @@ export class WidgetComponent implements OnInit {
   //   });
   // }
 }
+//TODO edit Add widget and Edit widget
 

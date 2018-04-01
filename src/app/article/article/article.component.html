@@ -1,0 +1,87 @@
+<!--Search Form-->
+<div class="row">
+  <div class="col-12">
+    <div class="card card-border-color card-border-color-primary">
+      <div class="card-header card-header-divider">Basic Form<span class="card-subtitle">This is the default bootstrap form layout</span></div>
+      <div class="card-body">
+        <form [formGroup]="searchForm" (ngSubmit)="getArticles(searchForm)">
+          <div class="form-group row">
+            <label class="col-12 col-sm-3 col-form-label text-sm-right">Category</label>
+            <div class="col-12 col-sm-8 col-lg-6">
+              <select class="form-control" formControlName="categoryId">
+                <option *ngFor="let category of categories" value="{{category.id}}" >{{category.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="search-title" class="col-12 col-sm-3 col-form-label text-sm-right">Title</label>
+            <div class="col-12 col-sm-8 col-lg-6">
+              <input formControlName="title" type="text" class="form-control" id="search-title">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-12 col-sm-3 col-form-label text-sm-right">Published</label>
+            <div class="col-12 col-sm-8 col-lg-6 mt-2">
+              <div class="form-group">
+                <div>
+                  <label class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" value="true" formControlName="published" class="custom-control-input"><span class="custom-control-label">Yes</span>
+                  </label>
+                  <label class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" value="false" formControlName="published" class="custom-control-input"><span class="custom-control-label">No</span>
+                  </label>
+                  <label class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" value="" formControlName="published" class="custom-control-input"><span class="custom-control-label">Any</span>
+                  </label>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-secondary">Search</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Articles List-->
+<div class="row">
+  <div class="col-12">
+    <div class="card card-table">
+      <div class="card-header">
+        <div class="tools dropdown"> <span class="icon mdi mdi-download"></span><a href="#" role="button" data-toggle="dropdown" class="dropdown-toggle"><span class="icon mdi mdi-more-vert"></span></a>
+          <div role="menu" class="dropdown-menu"><a href="#" class="dropdown-item">Action</a><a href="#" class="dropdown-item">Another action</a><a href="#" class="dropdown-item">Something else here</a>
+            <div class="dropdown-divider"></div><a href="#" class="dropdown-item">Separated link</a>
+          </div>
+        </div>
+        <div class="title">Articles</div>
+      </div>
+      <div class="card-body table-responsive">
+        <table class="table table-striped table-borderless">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th style="width:40%;">Title</th>
+            <th style="width:20%;">Published</th>
+            <th style="width:20%;">Date</th>
+            <th style="width:5%;">Banner</th>
+          </tr>
+          </thead>
+          <tbody class="no-border-x">
+          <tr *ngFor="let article of articles">
+            <td>{{article.id}}</td>
+            <td>{{article.title}}</td>
+            <td class="text-success">{{article.published}}</td>
+            <td>{{article.date}}</td>
+            <td class="text-success">{{article.banner ? 'Yes' : 'No'}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -20,6 +20,10 @@ const routes: Routes = [
     loadChildren: 'app/layout/layout.module#LayoutModule'
   },
   {
+    path: 'article',
+    loadChildren: 'app/article/article.module#ArticleModule'
+  },
+  {
     path: 'users',
     loadChildren: 'app/users/users.module#UsersModule',
     canActivate: [AuthGuardService]
