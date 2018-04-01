@@ -159,6 +159,8 @@ export class DataService {
       return this.http.delete(path, options);
     } else if (method === 'put') {
       return this.http.put(path, request, options);
+    } else if (method === 'get') {
+      return this.http.get(path, options);
     }
   }
 
