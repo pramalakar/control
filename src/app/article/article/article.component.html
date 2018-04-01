@@ -2,8 +2,9 @@
 <div class="row">
   <div class="col-12">
     <div class="card card-border-color card-border-color-primary">
-      <div class="card-header card-header-divider">Basic Form<span class="card-subtitle">This is the default bootstrap form layout</span></div>
-      <div class="card-body">
+      <div data-toggle="collapse" data-target="#collapseOne2" aria-expanded="false" aria-controls="collapseOne2" class="card-header card-header-divider">
+        <i class="icon mdi mdi-chevron-right"></i> Filter Articles<span class="card-subtitle">Use below filter options to customize artiles</span></div>
+      <div id="collapseOne2" class="card-body">
         <form [formGroup]="searchForm" (ngSubmit)="getArticles(searchForm)">
           <div class="form-group row">
             <label class="col-12 col-sm-3 col-form-label text-sm-right">Category</label>
