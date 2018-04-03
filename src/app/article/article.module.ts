@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { ArticleRoutingModule } from './article-routing.module';
 import { ArticleComponent } from './article/article.component';
+import { CategoryComponent } from './category/category.component';
 
 
 @NgModule({
@@ -15,6 +16,6 @@ import { ArticleComponent } from './article/article.component';
     ArticleRoutingModule,
     ReactiveFormsModule
   ],
-  declarations: [ArticleComponent]
+  declarations: [ArticleComponent, CategoryComponent]
 })
 export class ArticleModule { }

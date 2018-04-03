@@ -4,6 +4,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {ArticleComponent} from './article/article.component';
+import {CategoryComponent} from './category/category.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path: 'article',
     component: ArticleComponent,
+  },
+  {
+    path: 'category',
+    component: CategoryComponent,
   },
   {
     path: '**',
