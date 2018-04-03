@@ -31,9 +31,11 @@ export class ArticleComponent implements OnInit {
 
   getArticles(searchForm) {
     const searchInput = searchForm.value;
-    const req = 'categoryId=' + searchInput.categoryId +
-    '&published=' + searchInput.published +
-    '&title=' + searchInput.title;
+    const req = {
+      'categoryId': searchInput.categoryId,
+      'published': searchInput.published,
+      'title': searchInput.title
+    };
     this.dataService.execute('post', '/api/Article/SearchArticle', req).subscribe((data) => {
       this.articles = data;
       console.log(data);

@@ -117,6 +117,16 @@ export class DataService {
     });
   }
 
+  public authenticate(method, action, request) {
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      })
+    };
+    const path = 'http://' + 'localhost:60882' + action;
+    return this.http.post(path, request, options);
+  }
+
   public execute(method, action, request) {
     return this._execute(this.server, method, action, request);
   }
@@ -139,14 +149,14 @@ export class DataService {
     if (this.token) {
       options = {
         headers: new HttpHeaders({
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          'Content-Type': 'application/json',
           'Authorization':  'Bearer ' + this.token
         })
       };
     } else {
       options = {
         headers: new HttpHeaders({
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          'Content-Type': 'application/json',
         })
       };
     }

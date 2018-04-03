@@ -72,10 +72,11 @@ export class WidgetComponent implements OnInit {
     //     arrayOfData: this.fb.array([])
     //   })
     // );
-    const req =
-      'title=' + '' +
-      '&order=' + (control.length + 1) +
-      '&layoutId=' + this.id;
+    const req = {
+      'title' : '',
+      'order' : (control.length + 1),
+      'layoutId' : this.id
+    }
     this.dataService.execute('post', '/api/WidgetRow/CreateWidgetRow', req).subscribe((data) => {
       control.push(this.patchValue(data.id, 'Title here', data.order, data.layoutId, data.widget));
     });
@@ -97,10 +98,12 @@ export class WidgetComponent implements OnInit {
   updateWidgetRow(queryForm) {
     const data = queryForm.controls.arrayOfData.value[this.updateRowIndex];
     console.log(data);
-    const req = 'id=' + data.id +
-      '&title=' + data.title +
-      '&order=' + data.order +
-      '&layoutId=' + data.layoutId;
+    const req = {
+      'id': data.id,
+      'title': data.title,
+      'order': data.order,
+      'layoutId': data.layoutId
+    }
     this.dataService.execute('put', '/api/WidgetRow/UpdateWidgetRow?id=' + data.id, req).subscribe(() => {
       this.updateRowIndex = '';
     });

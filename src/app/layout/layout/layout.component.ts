@@ -40,7 +40,11 @@ export class LayoutComponent implements OnInit {
     this.mode = 'add';
   }
   addLayout(layoutForm) {
-    let req = 'name=' + layoutForm.value.layoutName + '&description=' + layoutForm.value.layoutDescription;
+    let req = {
+      'name': layoutForm.value.layoutName,
+      'description': layoutForm.value.layoutDescription
+    };
+    // let req = 'name=' + layoutForm.value.layoutName + '&description=' + layoutForm.value.layoutDescription;
     this.dataService.execute('post', '/api/Layout/CreateLayout', req).subscribe((data) => {
       this.layouts.push(data);
       this.clearLaoutForm();
@@ -59,10 +63,16 @@ export class LayoutComponent implements OnInit {
   }
 
   updateLayout(layoutForm) {
-    const req = 'id=' + layoutForm.value.layoutId +
-      '&name=' + layoutForm.value.layoutName +
-      '&description=' + layoutForm.value.layoutDescription +
-      '&statusId=' + layoutForm.value.layoutStatusId;
+    // const req = 'id=' + layoutForm.value.layoutId +
+    //   '&name=' + layoutForm.value.layoutName +
+    //   '&description=' + layoutForm.value.layoutDescription +
+    //   '&statusId=' + layoutForm.value.layoutStatusId;
+    const req = {
+      'id': layoutForm.value.layoutId,
+      'name': layoutForm.value.layoutName,
+      'description': layoutForm.value.layoutDescription,
+      'statusId': layoutForm.value.layoutStatusId
+    };
     this.dataService.execute('put', '/api/Layout/UpdateLayout?id=' + layoutForm.value.layoutId, req).subscribe(() => {
       const elementPos = this.layouts.map(function(x) {return x.id; }).indexOf(layoutForm.value.layoutId);
       console.log(this.layouts[elementPos]);
