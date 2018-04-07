@@ -113,7 +113,7 @@ export class ArticleComponent implements OnInit {
       title: new FormControl(''), // default value null
       brief: new FormControl(''), // default value ''
       content: new FormControl(''),
-      published: new FormControl(''),
+      published: new FormControl('false'),
       date: new FormControl(''),
       banner: new FormControl(''),
       ownerId: new FormControl(''),
