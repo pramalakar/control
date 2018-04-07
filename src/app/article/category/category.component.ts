@@ -59,6 +59,12 @@ export class CategoryComponent implements OnInit {
     });
   }
 
+  deleteCategory(index, categoryId) {
+    this.dataService.execute('delete', '/api/Article/DeleteCategory?id=' + categoryId, {}).subscribe(() => {
+      this.categories.splice(index, 1);
+    });
+  }
+
   clearFile() {
     this.form.get('avatar').setValue(null);
     this.fileInput.nativeElement.value = '';
