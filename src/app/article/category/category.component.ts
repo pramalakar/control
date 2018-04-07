@@ -49,19 +49,11 @@ export class CategoryComponent implements OnInit {
       };
     }
   }
-  private prepareSave(): any {
-    const input = new FormData();
-    // input.append('title', this.form.get('title').value);
-    // input.append('content', this.form.get('content').value);
-    return input;
-  }
 
   createCategory() {
-    const formModel = this.prepareSave();
     // this.loading = true;
     // In a real-world app you'd have a http request / service call here like
     // this.http.post('apiUrl', formModel)
-    debugger;
     this.dataService.execute('post', '/api/Article/CreateCategory', this.form.value).subscribe((data) => {
       this.categories.push(data);
     });
