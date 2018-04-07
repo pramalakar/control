@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {DataService} from '../../../providers/data-service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-article',
@@ -15,19 +16,22 @@ export class ArticleComponent implements OnInit {
   searchForm: FormGroup;
   articleForm: FormGroup;
 
+  user;
+
   datePickerConfig: Partial<BsDatepickerConfig>;
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService, public sanitiser: DomSanitizer) {
     this.datePickerConfig = Object.assign( {},
       {
         containerClass: 'theme-dark-blue',
         showWeekNumbers: true,
-        minDate: new Date(2018, 0, 1),
-        maxDate: new Date(2018, 11, 1)
+        // minDate: new Date(2018, 0, 1),
+        // maxDate: new Date(2018, 11, 1)
       });
   }
 
   ngOnInit() {
     this.initForm();
+    this.getUser();
     this.getCategories();
     this.getArticles(this.searchForm);
   }
@@ -48,6 +52,7 @@ export class ArticleComponent implements OnInit {
     };
     this.dataService.execute('post', '/api/Article/SearchArticle', req).subscribe((data) => {
       this.articles = data;
+      this.articles[3].content = this.sanitiser.bypassSecurityTrustHtml(this.articles[3].content);
       console.log(data);
     });
   }
@@ -71,9 +76,9 @@ export class ArticleComponent implements OnInit {
       published: article.value.published,
       date: article.value.date,
       banner: article.value.banner,
-      ownerId: 1
+      ownerId: this.user.userID
     };
-    this.dataService.execute('post', '/api/Article/CreateArticle', req).subscribe((data) => {
+    this.dataService.execute('post', '/api/Article/CreateArticle?id=' + article.value.categoryId, req).subscribe((data) => {
       console.log(data);
       this.articles.push(data);
     });
@@ -90,6 +95,13 @@ export class ArticleComponent implements OnInit {
   //     console.log(data);
   //   });
   // }
+  getUser() {
+    this.dataService.getObject('user').subscribe((user) => {
+      this.user = user;
+    }, () => {
+      // console.log('error');
+    });
+  }
 
   initForm() {
     this.searchForm = new FormGroup({
@@ -104,7 +116,8 @@ export class ArticleComponent implements OnInit {
       published: new FormControl(''),
       date: new FormControl(''),
       banner: new FormControl(''),
-      ownerId: new FormControl('')
+      ownerId: new FormControl(''),
+      categoryId: new FormControl('')
     });
   }
 

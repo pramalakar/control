@@ -103,6 +103,14 @@
             </div>
           </div>
           <div class="form-group row">
+            <label class="col-12 col-sm-3 col-form-label text-sm-right">Category</label>
+            <div class="col-12 col-sm-8 col-lg-6">
+              <select class="form-control" formControlName="categoryId">
+                <option *ngFor="let category of categories" value="{{category.id}}" >{{category.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
             <label for="search-title" class="col-12 col-sm-3 col-form-label text-sm-right">Brief</label>
             <div class="col-12 col-sm-8 col-lg-6">
               <input formControlName="brief" type="text" class="form-control" id="brief">
