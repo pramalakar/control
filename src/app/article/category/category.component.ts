@@ -13,6 +13,7 @@ export class CategoryComponent implements OnInit {
   categories: any = [];
   form: FormGroup;
   // loading = false;
+  status: boolean = 1; // Active 1, Inactive 0, Deleted 2
 
   @ViewChild('fileInput') fileInput: ElementRef;
 
@@ -60,8 +61,22 @@ export class CategoryComponent implements OnInit {
   }
 
   deleteCategory(index, categoryId) {
-    this.dataService.execute('delete', '/api/Article/DeleteCategory?id=' + categoryId, {}).subscribe(() => {
-      this.categories.splice(index, 1);
+    const req = this.categories[index];
+    req.statusID = 2;
+    this.dataService.execute('put', '/api/Article/UpdateCategory?id=' + categoryId, req).subscribe(() => {
+      this.categories[index].statusID = 2;
+    });
+  }
+
+  inactiveCategory(index, categoryId) {
+    const req = this.categories[index];
+    if (req.statusID === 0) {
+      req.statusID = 1;
+    } else {
+      req.statusID = 0;
+    }
+    this.dataService.execute('put', '/api/Article/UpdateCategory?id=' + categoryId, req).subscribe(() => {
+      this.categories[index].statusID = req.statusID;
     });
   }
 
