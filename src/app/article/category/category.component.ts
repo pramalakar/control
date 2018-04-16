@@ -13,7 +13,7 @@ export class CategoryComponent implements OnInit {
   categories: any = [];
   form: FormGroup;
   // loading = false;
-  status: boolean = 1; // Active 1, Inactive 0, Deleted 2
+  status = 1; // Active 1, Inactive 0, Deleted 2
 
   @ViewChild('fileInput') fileInput: ElementRef;
 
@@ -65,6 +65,13 @@ export class CategoryComponent implements OnInit {
     req.statusID = 2;
     this.dataService.execute('put', '/api/Article/UpdateCategory?id=' + categoryId, req).subscribe(() => {
       this.categories[index].statusID = 2;
+    });
+  }
+  restoreCategory(index, categoryId) {
+    const req = this.categories[index];
+    req.statusID = 1;
+    this.dataService.execute('put', '/api/Article/UpdateCategory?id=' + categoryId, req).subscribe(() => {
+      this.categories[index].statusID = 1;
     });
   }
 

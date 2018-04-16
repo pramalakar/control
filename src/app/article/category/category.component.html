@@ -57,7 +57,7 @@
             <th style="width:20%;">Name</th>
             <th style="width:40%;">Content</th>
             <th style="width:5%;">Banner</th>
-            <th style="width:20%;"></th>
+            <th style="width:20%;">Action</th>
             <!--<th style="width:5%;">Created Date</th>-->
           </tr>
           </thead>
@@ -70,11 +70,20 @@
               <td>{{category.banner ? 'Yes' : 'No'}}</td>
               <td class="actions">
                 <div class="widget-head">
-                  <div class="tools">
-                    <span (click)="inactiveCategory(i, category.id)" class="icon mdi mdi-eye"></span>
-                    <span (click)="openUpdateForm(i)" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="icon mdi mdi-edit"></span>
-                    <span (click)="deleteCategory(i, category.id)" class="icon mdi mdi-close"></span>
+                  <div class="tools dropdown">
+                    <a href="#" role="button" data-toggle="dropdown" class="dropdown-toggle">
+                    <span class="icon mdi mdi-more-vert"></span></a>
+                    <div role="menu" class="dropdown-menu float-right">
+                      <a *ngIf="category.statusID !== 2" (click)="inactiveCategory(i, category.id)" class="dropdown-item">{{category.statusID == 0 ? "Publish" : "Unpublish"}}</a>
+                      <a *ngIf="category.statusID !== 2" (click)="openUpdateForm(i)" data-toggle="collapse" data-target="#collapseOne2" aria-expanded="false" aria-controls="collapseOne2" class="dropdown-item">Edit</a>
+                      <div class="dropdown-divider"></div><a (click)="category.statusID == 2 ? restoreCategory(i, category.id) : deleteCategory(i, category.id)" class="dropdown-item">{{category.statusID == 2 ? "Restore" : "Delete"}}</a>
+                    </div>
                   </div>
+                  <!--<div class="tools">-->
+                    <!--<span (click)="inactiveCategory(i, category.id)" class="icon mdi mdi-eye"></span>-->
+                    <!--<span (click)="openUpdateForm(i)" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="icon mdi mdi-edit"></span>-->
+                    <!--<span (click)="deleteCategory(i, category.id)" class="icon mdi mdi-close"></span>-->
+                  <!--</div>-->
                 </div>
               </td>
               <!--<td class="text-success">{{category.date}}</td>-->
